@@ -37,9 +37,19 @@ public class mainView extends JFrame{
 		setBackground(Color.white);
 		setSize(400,300);
 		final float[] data = new float[10];
+		data[0] = 1;
+		data[1] = 1;
+		data[2] = 1;
+		data[3] = 1;
+		data[4] = 1;
+		data[5] = 1;
+		data[6] = 1;
+		data[7] = 1;
+		data[8] = 1;
+		data[9] = 1;
 		
-		Chart2D chart = new Chart2D();
-		ITrace2D trace = new Trace2DSimple();
+		final Chart2D chart = new Chart2D();
+		final ITrace2D trace = new Trace2DSimple();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -65,12 +75,14 @@ public class mainView extends JFrame{
 						  DataInputStream in = new DataInputStream(fstream);
 						  BufferedReader br = new BufferedReader(new InputStreamReader(in));
 						  String strLine;
-						  
 						  while ((strLine = br.readLine()) != null)   {
+							  System.out.println("w while");
 							  // Print the content on the console
-							  for(int i=0;i>=10;i++){
-									//trace.addPoint(i,random.nextDouble()*10.0+i);
-								  	data[i] = Float.parseFloat(strLine) ;
+							  for(int ii=10;ii>0;ii--){
+								  System.out.println("w forze");
+									trace.addPoint(ii,3*10.0+ii);
+					//			  	data[ii] = Float.parseFloat(strLine);
+									System.out.println ("data od i:" + data[ii]); 
 							  }
 
 							  System.out.println (strLine);
@@ -100,12 +112,16 @@ public class mainView extends JFrame{
 		
 
 		chart.addTrace(trace); 
-		
-		
-		for(int i=10;i>=0;i--){
-			trace.addPoint(i,data[i]);
-		}
-
 		getContentPane().add(chart);
+		
+		int size = data.length;
+		System.out.println("dlugosc:" + size + "\n");
+/*
+ * 		for(int i=size;i>=0;i--){
+	//		trace.addPoint(i,data[i]);
+		}
+ */
+
+		
 	}
 }
