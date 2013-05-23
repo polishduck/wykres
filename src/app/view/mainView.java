@@ -80,7 +80,9 @@ public class mainView extends JFrame{
 							  // Print the content on the console
 							  for(int ii=10;ii>0;ii--){
 								  System.out.println("w forze");
-									trace.addPoint(ii,3*10.0+ii);
+									try {
+										trace.addPoint(ii,3*10.0+ii);
+									} catch
 					//			  	data[ii] = Float.parseFloat(strLine);
 									System.out.println ("data od i:" + data[ii]); 
 							  }

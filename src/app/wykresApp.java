@@ -11,3 +11,5 @@ public class wykresApp {
 	}
 }
 	
+
+//http://jchart2d.sourceforge.net/usage.shtml
