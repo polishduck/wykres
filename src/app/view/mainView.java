@@ -29,6 +29,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import sun.security.util.Length;
+
 
 import app.controller.*;
 import app.model.*;
@@ -43,73 +45,57 @@ public class mainView extends JFrame{
 		setTitle("Wyswietlanie wykresow");
 		setBackground(Color.white);
 		setSize(400,300);
-		final float[] data = new float[1000];
-		for (int k=1; k<1000; k++) {
-			data[k] = 0;				
-		}
+		final float[] data = new float[128];
+	//	for (int k=1; k<128; k++) {
+		//	data[k] = 0;				
+	//	}
+		System.out.print("wielkosc:" + data.length + "\n");
 		
 
 		Chart2D chart = new Chart2D();
 		final ITrace2D trace = new Trace2DLtd(200);
 		trace.setColor(Color.BLUE);
 
-		chart.addTrace(trace); 
-//		
-
-		
+		chart.addTrace(trace); 	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JMenuBar menuBar=new JMenuBar();
-		JMenu menu = new JMenu("Aplikacja");
-		menuBar.add(menu);
+		int pp = 0;
 		
-		final JFileChooser fc = new JFileChooser();
-		
-		JMenuItem menuItem1 = new JMenuItem("Otworz plik danych");
-		JMenuItem menuItem2 = new JMenuItem("Zamknij");
-		
-		menuItem1.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int returnVal = fc.showOpenDialog(mainView.this);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-					System.out.print("Opened file " + file.getName() + "\n");
-					try {
-						  FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
-						  // Get the object of DataInputStream
-						  DataInputStream in = new DataInputStream(fstream);
-						  BufferedReader br = new BufferedReader(new InputStreamReader(in));
-						  String strLine;
-						  while ((strLine = br.readLine()) != null)   {
-							  // Print the content on the console
-							  for(int ii=0;ii<1000;ii++){
-							//		trace.addPoint(ii,3*10.0+ii);
-								  	data[ii] = Float.parseFloat(strLine);
-							  }
+		File file;
+		file = new File("aa.dat");
+        String dane = "";
+        String daneOut = "";
+        
+        try {
+        	 
+            BufferedReader odczytaj = new BufferedReader(new FileReader(file));
+            
+       //     for (int ii = 0;ii<128;ii++) {
+            do {
+            	
+            
+            	while ((dane = odczytaj.readLine()) != null) {
+                // tutaj dane które odczytasz zapisujesz gdzie chcesz
+            		data[pp] = Float.parseFloat(dane);
+            		pp++;
+            		System.out.print(pp + ")" + dane + "\n");
+            		
+        //    	}
+            	
+            //	System.out.print(data[ii] + "\n");
+//            	trace.addPoint(pp,Float.parseFloat(dane));
+	//			pp++;
 
-						  }
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			}
-		});
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_X, ActionEvent.CTRL_MASK));
-		menuItem2.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		menu.add(menuItem1);
-		menu.add(menuItem2);
-		setJMenuBar(menuBar);
-		
+            	}
+            	pp++;
+            	odczytaj = new BufferedReader(new FileReader(file));
+            } while (pp < 128);
+            
+        } catch (IOException e) {
+        	System.out.print("dupa");
+        }
+    
+
 		setVisible(true);
 		
 		getContentPane().add(chart);
@@ -132,9 +118,10 @@ public class mainView extends JFrame{
 	        this.m_y = (add) ? this.m_y + Math.random() : this.m_y - Math.random();
 	        trace.addPoint(jj, data[jj]);
 	        jj=jj+1;
-	        if (jj == 1000){
+	        if (jj == 127){
 	        	System.out.println("wychodzi");
-	        	cancel();
+	        	//cancel();
+	        	
 	        }
 	       }
 	    };
