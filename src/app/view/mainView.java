@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,8 +41,11 @@ public class mainView extends JFrame{
 	public Timer timer;
     public TimerTask task;
     public int jj=0;
+    private static final int MAX_LENGTH = 128;
+	public byte[] data = new byte[MAX_LENGTH];
+	public ITrace2D trace = new Trace2DLtd(128);
     
-	public mainView(mainController m){
+	public mainView(){
 		setTitle("Wyswietlanie wykresow");
 		setBackground(Color.white);
 		setSize(400,300);
@@ -49,56 +53,24 @@ public class mainView extends JFrame{
 	//	for (int k=1; k<128; k++) {
 		//	data[k] = 0;				
 	//	}
-		System.out.print("wielkosc:" + data.length + "\n");
-		
-
-		Chart2D chart = new Chart2D();
-		final ITrace2D trace = new Trace2DLtd(200);
+//		System.out.print("wielkosc:" + data.length + "\n");
+	//	System.out.println("w my view:" + Arrays.toString(data));
+  		Chart2D chart = new Chart2D();
 		trace.setColor(Color.BLUE);
+		
+		getContentPane().add(chart);
 
 		chart.addTrace(trace); 	
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		int pp = 0;
-		
-		File file;
-		file = new File("aa.dat");
-        String dane = "";
-        String daneOut = "";
-        
-        try {
-        	 
-            BufferedReader odczytaj = new BufferedReader(new FileReader(file));
-            
-       //     for (int ii = 0;ii<128;ii++) {
-            do {
-            	
-            
-            	while ((dane = odczytaj.readLine()) != null) {
-                // tutaj dane które odczytasz zapisujesz gdzie chcesz
-            		data[pp] = Float.parseFloat(dane);
-            		pp++;
-            		System.out.print(pp + ")" + dane + "\n");
-            		
-        //    	}
-            	
-            //	System.out.print(data[ii] + "\n");
-//            	trace.addPoint(pp,Float.parseFloat(dane));
-	//			pp++;
 
-            	}
-            	pp++;
-            	odczytaj = new BufferedReader(new FileReader(file));
-            } while (pp < 128);
-            
-        } catch (IOException e) {
-        	System.out.print("dupa");
-        }
-    
+        //final 
+        //String daneOut = "";
 
 		setVisible(true);
 		
-		getContentPane().add(chart);
+		
 		int size = data.length;
 	  
 		timer = new Timer(true);
@@ -112,19 +84,55 @@ public class mainView extends JFrame{
 
 	      @Override
 	      public void run() {
-	        double rand = Math.random();
-	        boolean add = (rand >= 0.5) ? true : false;
+	  		int pp = 0;
+			
+			File file;
+			file = new File("file.dat");
+			String dane = "";
+				
+			
+		//		System.out.print(data[i]);
+			
+			
+	    	  /*
+	          try {
+	        	  
+	        	  
+	        	  
+	         	 
+	         /*     BufferedReader odczytaj = new BufferedReader(new FileReader(file));
+	             // do {         
+	              		while ((dane = odczytaj.readLine()) != null) {
+	              			data[pp] = Float.parseFloat(dane);
+	              			pp++;
+	              			trace.addPoint(pp,Float.parseFloat(dane));
+	              		}
+	              	pp++;
+	              	odczytaj = new BufferedReader(new FileReader(file));
+	            //  } while (pp < 128);
+	             
+	          } catch (IOException e) {
+	          	System.out.print("dupa");
+	          }
+	        */
 	        
-	        this.m_y = (add) ? this.m_y + Math.random() : this.m_y - Math.random();
-	        trace.addPoint(jj, data[jj]);
-	        jj=jj+1;
-	        if (jj == 127){
-	        	System.out.println("wychodzi");
-	        	//cancel();
-	        	
-	        }
 	       }
 	    };
-		timer.schedule(task, 10, 20);
+		//timer.schedule(task, 1, 2);
+	    timer.schedule(task,0,20);
+	    
 	}
+
+	public void zapisz(byte[] data) {
+	//	System.out.print("\n\n\n\ndupa");
+		this.data = data;
+		
+		//this.data[50] = 40;
+		
+		for (int i=0; i<128; i++) {
+			trace.addPoint(i, this.data[i]);
+		}
+	}
+		
+
 }

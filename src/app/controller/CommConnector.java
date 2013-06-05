@@ -1,8 +1,13 @@
 package app.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+
+import app.view.mainView;
 
 
 import jssc.SerialPort;
@@ -12,6 +17,8 @@ import jssc.SerialPortException;
 import jssc.SerialPortList;
 
 public class CommConnector {
+	
+//	public mainView myView;
 	
 	private ArrayList<CommListenerInterface> listeners;
     private SerialPort serialPort;
@@ -77,7 +84,12 @@ public class CommConnector {
         				listeners.get(l).readingError();
 				}
 				for(int l=0; l<listeners.size(); l++)
-    				listeners.get(l).messageReceived(data);       
+					try {
+						listeners.get(l).messageReceived(data);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}       
             }
         }
     }
@@ -85,10 +97,32 @@ public class CommConnector {
     public class SimpleCommListener implements CommListenerInterface {
     	private byte[] data = new byte[MAX_LENGTH];
     	private int counter = 0;
+		public mainView myView;
     	private static final int MAX_LENGTH = 128;
 		@Override
-		public void messageReceived(byte[] message) {
-			System.out.println(Arrays.toString(message));
+		public void messageReceived(byte[] message) throws FileNotFoundException {
+			int len = message.length;
+//			System.out.println("wielkosc paczki:" +  message.length);
+//			System.out.println("cala paczka" + Arrays.toString(message) + "\n");
+			int count_pack = len/128;
+			
+//			File file;
+//			file = new File("aa.dat");
+			PrintWriter zapis = new PrintWriter("file.dat");
+			
+			for (int jj=0; jj<count_pack; jj++) {
+				for(int i=(0+jj*128); i<(127+jj*128); i++){
+					data[counter++]=message[i];
+					zapis.println(message[i]);
+				}
+				wyslij(data);
+				
+		//		System.out.println((jj+1) + ". paczka" + Arrays.toString(data) + "\n");
+				counter=0;
+				zapis.close();
+				break;
+			}	
+	//		System.out.println(Arrays.toString(message));
 			//deklaracja tablicy o wielkosci 100
 			//dochodzi do konca tablicy i konczymy i nastepna zapelniamy
 			//dmesg
@@ -112,11 +146,17 @@ public class CommConnector {
 				
 			}
 	*/	}
+		private void wyslij(byte[] data) {
+			System.out.println("cala paczka w wyslij" + Arrays.toString(data) + "\n");
+			myView.zapisz(data);
+			
+		}
 		@Override
 		public void portAlreadyInUse() {}
 		@Override
 		public void writingError() {}
 		@Override
 		public void readingError() {}
+		
     }
 }

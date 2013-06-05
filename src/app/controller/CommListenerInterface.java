@@ -1,5 +1,7 @@
 package app.controller;
 
+import java.io.FileNotFoundException;
+
 /**
  * comm port listener interface
  * @author Krzysiek
@@ -9,8 +11,9 @@ public interface CommListenerInterface {
 	 * message received notification
 	 * @param message message in array
 	 * @param len message length
+	 * @throws FileNotFoundException 
 	 */
-    public void messageReceived(byte[] message);
+    public void messageReceived(byte[] message) throws FileNotFoundException;
     
     /**
      * port in use error notification

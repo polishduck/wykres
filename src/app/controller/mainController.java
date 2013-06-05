@@ -9,10 +9,10 @@ import app.model.*;
 
 public class mainController implements ActionListener {
 	
-	private mainView myView;
+	public mainView myView;
 
 	public mainController() {
-		myView = new mainView(this);
+//		myView = new mainView(this);
 		
 	}
 
