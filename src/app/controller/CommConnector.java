@@ -1,11 +1,9 @@
 package app.controller;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
+
 
 import app.view.mainView;
 
@@ -18,8 +16,7 @@ import jssc.SerialPortList;
 
 public class CommConnector {
 	
-//	public mainView myView;
-	
+
 	private ArrayList<CommListenerInterface> listeners;
     private SerialPort serialPort;
     private boolean listening;
@@ -101,53 +98,23 @@ public class CommConnector {
     	private static final int MAX_LENGTH = 128;
 		@Override
 		public void messageReceived(byte[] message) throws FileNotFoundException {
+			System.out.println("package size: " + message.length + "\n");
+			System.out.println("full package: " + Arrays.toString(message) + "\n");
 			int len = message.length;
-//			System.out.println("wielkosc paczki:" +  message.length);
-//			System.out.println("cala paczka" + Arrays.toString(message) + "\n");
 			int count_pack = len/128;
-			
-//			File file;
-//			file = new File("aa.dat");
-			PrintWriter zapis = new PrintWriter("file.dat");
 			
 			for (int jj=0; jj<count_pack; jj++) {
 				for(int i=(0+jj*128); i<(127+jj*128); i++){
 					data[counter++]=message[i];
-					zapis.println(message[i]);
 				}
+				System.out.println(Arrays.toString(data) + "\n");
 				wyslij(data);
-				
-		//		System.out.println((jj+1) + ". paczka" + Arrays.toString(data) + "\n");
 				counter=0;
-				zapis.close();
 				break;
 			}	
-	//		System.out.println(Arrays.toString(message));
-			//deklaracja tablicy o wielkosci 100
-			//dochodzi do konca tablicy i konczymy i nastepna zapelniamy
-			//dmesg
-	/*		int len = message.length;
-			if(len+counter>MAX_LENGTH){
-				int difference = len+counter-MAX_LENGTH;
-				for(int i=0; i<difference;i++)
-					data[counter++]=message[i];
-				/*
-				 * place to send data to network
-				 */
-	/*			counter=0;
-				byte[] remainMessage = Arrays.copyOfRange(message, difference, len);
-				messageReceived(remainMessage);
-			}
-			else{
-				for(int i=0; i<len; i++)
-					data[counter++]=message[i];
-			}
-			if(counter==128){
-				
-			}
-	*/	}
+		}
 		private void wyslij(byte[] data) {
-			System.out.println("cala paczka w wyslij" + Arrays.toString(data) + "\n");
+		//	System.out.println("cala paczka w wyslij" + Arrays.toString(data) + "\n");
 			myView.zapisz(data);
 			
 		}

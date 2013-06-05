@@ -25,29 +25,13 @@ public class wykresApp {
     	ArrayList<String> portNames = null;
     	Scanner in = new Scanner(System.in);
     	try {
-/*    		portNames = commConnector.getPortsNames();
-    		if(portNames.size()==0) {
-    			System.out.println("No ports found");
-    	//		return;
-    		}
-    		System.out.println("Select port:");
-    		
-    		for(String pName : portNames) {
-    			System.out.println(i+") "+pName);
-    			i++;
-    		}
-*/    	//	i = in.nextInt();
-    		//commConnector.connect(portNames.get(i-1), 115200, 8, 1, 0);
     		commConnector.connect("/dev/ttyACM0", 115200, 8, 1, 0);
     	} catch(Exception e) {
-    		//e.printStackTrace();
-    		System.out.println("paczka:" + e.getMessage() + "\n");
-    		//System.out.println(e.getMessage());
+     		//System.out.println(e.getMessage());
     		return;
     	}
     	
     	SimpleCommListener listener =  commConnector.new SimpleCommListener();
-    	//listener.setView(mController.myView);
     	listener.myView = myView;
     	commConnector.addListener(listener);
     	
@@ -55,14 +39,9 @@ public class wykresApp {
 			commConnector.startPortListening();
 		} catch (SerialPortException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.out.println("paczka:" + e.getMessage() + "\n");
 			return;
 		}
-		
-    	
-    //	System.out.println("Connected to: "+portNames.get(i-1));
-    	in.nextLine();
+		in.nextLine();
     	String line;
     	while(true) {
     		line = in.nextLine();
