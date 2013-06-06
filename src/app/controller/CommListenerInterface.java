@@ -9,11 +9,11 @@ import java.io.FileNotFoundException;
 public interface CommListenerInterface {
 	/**
 	 * message received notification
-	 * @param message message in array
+	 * @param data message in array
 	 * @param len message length
 	 * @throws FileNotFoundException 
 	 */
-    public void messageReceived(byte[] message) throws FileNotFoundException;
+    public void messageReceived(int[] data);
     
     /**
      * port in use error notification

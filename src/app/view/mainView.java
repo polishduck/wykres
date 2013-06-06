@@ -16,9 +16,9 @@ public class mainView extends JFrame{
 	public Timer timer;
     public TimerTask task;
     public int jj=0;
-    private static final int MAX_LENGTH = 128;
-	public byte[] data = new byte[MAX_LENGTH];
-	public ITrace2D trace = new Trace2DLtd(128);
+    private static final int MAX_LENGTH = 256;
+	public int[] data = new int[MAX_LENGTH];
+	public ITrace2D trace = new Trace2DLtd(256);
     
 	public mainView(){
 		setTitle("Wyswietlanie wykresow");
@@ -34,11 +34,18 @@ public class mainView extends JFrame{
 		setVisible(true);
 	}
 
-	public void zapisz(byte[] data) {
-		this.data = data;
-		for (int i=0; i<128; i++) {
-			trace.addPoint(i, this.data[i]);
+	public void zapisz(int[] data2) {
+		this.data = data2;
+		int[] data1 = new int[256];
+		int ii=0;
+		for (int i=0; i<256; i++) {
+			data1[i] = data[ii]+data[++ii]<<8;
+			ii++;
 		}
+		for (int i=0; i<256; i++) {
+			trace.addPoint(i, data1[i]);
+		}
+		
 	}
 		
 

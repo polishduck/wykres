@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 
 
 import app.view.*;
-import app.model.*;
 
 public class mainController implements ActionListener {
 	

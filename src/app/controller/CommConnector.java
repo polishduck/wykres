@@ -73,9 +73,12 @@ public class CommConnector {
     	
         public void serialEvent(SerialPortEvent event) {
             if(event.isRXCHAR()){
-                byte[] data = null;
+             //   byte[] data = null;
+                int[] data = null;
 				try {
-					data = serialPort.readBytes();
+					System.out.println("czyta");
+			//		data = serialPort.readBytes();
+					data = serialPort.readIntArray();
 				} catch (SerialPortException e) {
         			for(int l=0; l<listeners.size(); l++)
         				listeners.get(l).readingError();
@@ -83,7 +86,7 @@ public class CommConnector {
 				for(int l=0; l<listeners.size(); l++)
 					try {
 						listeners.get(l).messageReceived(data);
-					} catch (FileNotFoundException e) {
+					} catch ( Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}       
@@ -92,29 +95,30 @@ public class CommConnector {
     }
     
     public class SimpleCommListener implements CommListenerInterface {
-    	private byte[] data = new byte[MAX_LENGTH];
+    	private static final int MAX_LENGTH = 512;
+    	private int[] data = new int[MAX_LENGTH];
     	private int counter = 0;
 		public mainView myView;
-    	private static final int MAX_LENGTH = 128;
-		@Override
-		public void messageReceived(byte[] message) throws FileNotFoundException {
+    	
+    	int c;
+		public void messageReceived(int[] message) {
 			System.out.println("package size: " + message.length + "\n");
 			System.out.println("full package: " + Arrays.toString(message) + "\n");
 			int len = message.length;
 			int count_pack = len/128;
-			
-			for (int jj=0; jj<count_pack; jj++) {
-				for(int i=(0+jj*128); i<(127+jj*128); i++){
-					data[counter++]=message[i];
+			for (int i =0; i<len; i++){
+				if (len > 512) {
+						break;
 				}
-				System.out.println(Arrays.toString(data) + "\n");
+				data[c++]=message[i];
+			}
+				
+			if (c == 512){
 				wyslij(data);
-				counter=0;
-				break;
-			}	
+				c = 0;
+			}
 		}
-		private void wyslij(byte[] data) {
-		//	System.out.println("cala paczka w wyslij" + Arrays.toString(data) + "\n");
+		private void wyslij(int[] data) {
 			myView.zapisz(data);
 			
 		}
@@ -124,6 +128,7 @@ public class CommConnector {
 		public void writingError() {}
 		@Override
 		public void readingError() {}
+		
 		
     }
 }
